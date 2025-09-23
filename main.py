@@ -11,4 +11,4 @@ def read_root():
 
 @app.get("/ping")
 def ping():
-    return {"msg": "pong"}
+    return {"status": "ok"}
