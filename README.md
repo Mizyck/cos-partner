@@ -57,7 +57,7 @@ Swagger 文档: http://127.0.0.1:8000/docs
   "user_input": "你好",
   "role": "界徐盛"
 }
-
+```
 响应示例：
 ```bash
 {
