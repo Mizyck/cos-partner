@@ -15,14 +15,23 @@ cd cos-partner
 
 ### 2. 安装依赖
 
-建议使用虚拟环境：
+建议使用conda创建虚拟环境：
 ```bash
-python -m venv venv
-source venv/bin/activate   # Linux / Mac
-venv\Scripts\activate      # Windows
+conda create -n cos-llm python=3.10 -y
+conda activate cos-llm
 
+# 安装基础依赖
 pip install -r requirements.txt
+```
+根据你的环境选择适合的torch版本：
 
+CPU：
+```bash
+pip install torch torchaudio --index-url https://download.pytorch.org/whl/cpu
+```
+GPU：
+```bash
+pip install torch torchaudio --index-url https://download.pytorch.org/whl/cu118
 ```
 
 ### 3. 启动服务

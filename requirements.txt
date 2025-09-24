@@ -1,4 +1,14 @@
+# Web 框架
 fastapi
-uvicorn
-pydantic
+uvicorn[standard]
+
+# ASR 相关
 funasr
+
+# 音频处理
+soundfile
+librosa
+
+# 工具库
+pyyaml
+requests
