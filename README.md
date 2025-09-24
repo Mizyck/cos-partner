@@ -65,15 +65,32 @@ Swagger 文档: http://127.0.0.1:8000/docs
   "reply": "界徐盛 回答：你好的回答",
 }
 ```
+### POST /asr/
+语音识别接口，采用FunASR
+请求方式： 
+```bash
+POST /asr/
+```
+请求参数：音频文件（form-data）
+响应示例：
+```bash
+{
+  "text": "...",
+  "status": "success"
+}
+```
+
 
 ## 项目结构
 ```bash
 cos-partner/
 ├── main.py              # 入口文件
 ├── routers/             # 路由模块
-│   └── chat.py
+│   ├── chat.py
+│   └── asr.py
 ├── services/            # 服务逻辑
-│   └── llm_service.py   # 模型调用（目前 mock）
+│   ├── llm_service.py   # 模型调用（目前 mock）
+│   └── asr_service.py   # asr模型调用
 ├── requirements.txt     # 依赖
 ├── README.md            # 项目说明
 └── .gitignore
