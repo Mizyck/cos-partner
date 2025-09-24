@@ -1,6 +1,31 @@
-venv/
+# Python 缓存
 __pycache__/
-*.pyc
-*.pyo
+*.py[cod]
+*$py.class
+
+# 虚拟环境
+venv/
+ENV/
+env/
+Lib/
+Scripts/
+pyvenv.cfg
+
+# 分发/打包
+build/
+dist/
+*.egg-info/
+
+# 日志文件
 *.log
+
+# 环境变量文件
 .env
+
+# IDE 配置
+.vscode/
+.idea/
+
+# 单元测试缓存
+.coverage
+.pytest_cache/

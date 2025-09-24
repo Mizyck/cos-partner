@@ -12,5 +12,10 @@ class ChatRequest(BaseModel):
 @router.post("/")
 def chat(req: ChatRequest):
     reply = call_llm(req.user_input, req.role)
-    return {"role": req.role, "reply":reply}
+    return {
+        "role": req.role,
+        "user_input": req.user_input,
+        "reply": reply,
+        "status": "success"
+    }
 

@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>角色扮演网页</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f0f4f8;
+        }
+        .container {
+            max-width: 800px;
+            margin: 50px auto;
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+        }
+        header {
+            background-color: #007BFF;
+            color: white;
+            padding: 20px;
+            text-align: center;
+        }
+        #search-container {
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+        }
+        #search-input {
+            padding: 10px;
+            width: 70%;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            margin-right: 10px;
+        }
+        #search-button {
+            padding: 10px 15px;
+            border: none;
+            border-radius: 5px;
+            background-color: #007BFF;
+            color: white;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        #search-button:hover {
+            background-color: #0056b3;
+        }
+        #chat-container {
+            padding: 20px;
+            height: 400px;
+            overflow-y: auto;
+            border-top: 1px solid #ccc;
+            border-bottom: 1px solid #ccc;
+        }
+        .message {
+            margin: 10px 0;
+            padding: 10px;
+            border-radius: 5px;
+        }
+        .user-message {
+            background-color: #e1f0ff;
+            text-align: right;
+        }
+        .character-message {
+            background-color: #f1f1f1;
+            text-align: left;
+        }
+        #user-input-container {
+            padding: 20px;
+            display: flex;
+        }
+        #user-input {
+            flex: 1;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            margin-right: 10px;
+        }
+        #send-button {
+            padding: 10px 15px;
+            border: none;
+            border-radius: 5px;
+            background-color: #007BFF;
+            color: white;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        #send-button:hover {
+            background-color: #0056b3;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <header>
+            <h1>角色扮演聊天</h1>
+        </header>
+
+        <div id="search-container">
+            <input type="text" id="search-input" placeholder="搜索角色...">
+            <button id="search-button">搜索</button>
+        </div>
+
+        <div id="chat-container"></div>
+
+        <div id="user-input-container">
+            <input type="text" id="user-input" placeholder="输入你的消息...">
+            <button id="send-button">发送</button>
+        </div>
+    </div>
+
+    <script>
+        document.getElementById('search-button').onclick = function() {
+            const character = document.getElementById('search-input').value;
+            document.getElementById('chat-container').innerHTML +=
+                `<div class="message character-message">你选择了角色: <strong>${character}</strong></div>`;
+            document.getElementById('search-input').value = ''; // 清空输入框
+        };
+
+        document.getElementById('send-button').onclick = async function() {
+            const userInput = document.getElementById('user-input').value;
+            const character = document.getElementById('search-input').value || "界徐盛"; // 默认角色
+            document.getElementById('chat-container').innerHTML +=
+                `<div class="message user-message">你: ${userInput}</div>`;
+            document.getElementById('user-input').value = '';
+
+            // 调用 FastAPI 后端
+            try {
+                const response = await fetch('http://127.0.0.1:8000/chat/', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ user_input: userInput, role: character }),
+                });
+
+                if (!response.ok) {
+                    throw new Error('网络响应不是 OK');
+                }
+
+                const data = await response.json();
+                document.getElementById('chat-container').innerHTML +=
+                    `<div class="message character-message">角色: ${data.reply}</div>`;
+            } catch (error) {
+                console.error('请求失败:', error);
+                document.getElementById('chat-container').innerHTML +=
+                    `<div class="message character-message">错误: ${error.message}</div>`;
+            }
+
+            // 自动滚动到最新消息
+            const chatContainer = document.getElementById('chat-container');
+            chatContainer.scrollTop = chatContainer.scrollHeight;
+        };
+    </script>
+
+</body>
+</html>
