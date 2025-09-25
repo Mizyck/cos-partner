@@ -29,3 +29,6 @@ dist/
 # 单元测试缓存
 .coverage
 .pytest_cache/
+
+# 模型
+models/
