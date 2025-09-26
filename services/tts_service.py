@@ -1,4 +1,5 @@
 import os
+import sys
 import io
 import tempfile
 import wave
@@ -6,6 +7,16 @@ from typing import Optional
 
 import torch
 import torchaudio
+
+# 获取当前文件所在目录
+BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+
+# 拼接 CosyVoice 的路径（相对项目根目录）
+COSYVOICE_PATH = os.path.join(BASE_DIR, "CosyVoice")
+
+# 加入 sys.path
+if COSYVOICE_PATH not in sys.path:
+    sys.path.append(COSYVOICE_PATH)
 
 # 懒加载模型
 _cosy = None

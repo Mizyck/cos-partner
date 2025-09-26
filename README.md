@@ -34,6 +34,22 @@ GPU：
 pip install torch torchaudio --index-url https://download.pytorch.org/whl/cu118
 ```
 
+克隆并安装CosyVoice：
+```bash
+git clone --recursive https://github.com/FunAudioLLM/CosyVoice.git
+# If you failed to clone the submodule due to network failures, please run the following command until success
+cd CosyVoice
+git submodule update --init --recursive
+```
+安装依赖：
+```bash
+pip install -r requirements.txt -i https://mirrors.aliyun.com/pypi/simple/ --trusted-host=mirrors.aliyun.com
+```
+模型下载脚本：
+```bash
+python download_tts.py
+```
+
 ### 3. 启动服务
 ```bash
 uvicorn main:app --reload --port 8000

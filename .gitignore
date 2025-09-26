@@ -33,3 +33,5 @@ dist/
 # 模型
 models/
 
+# CosyVoice 仓库
+CosyVoice/
