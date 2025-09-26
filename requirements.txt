@@ -1,5 +1,6 @@
 # Web 框架
 fastapi
+pydantic
 uvicorn[standard]
 
 # ASR 相关
@@ -12,3 +13,5 @@ librosa
 # 工具库
 pyyaml
 requests
+hyperpyyaml
+onnxruntime-gpu==1.18.0 # 如果没有GPU则修改为 onnxruntime==1.18.0
