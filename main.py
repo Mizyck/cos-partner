@@ -6,9 +6,9 @@ from routers import tts as tts_router
 
 app = FastAPI(title = "AI 角色扮演")
 
-app.include_router(chat.router, prefix = "/chat")
 app.include_router(asr_router.router, prefix = "/asr")
 app.include_router(tts_router.router, prefix = "/tts")
+app.include_router(chat.router, prefix = "/chat")
 
 @app.get("/")
 def read_root():
