@@ -6,6 +6,9 @@ uvicorn[standard]
 # ASR 相关
 funasr
 
+# TTS 相关
+TTS>=0.22.0
+
 # 音频处理
 soundfile
 librosa

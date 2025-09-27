@@ -32,6 +32,4 @@ dist/
 
 # 模型
 models/
-
-# CosyVoice 仓库
-CosyVoice/
+~/.local/share/tts/ # TTS 模型缓存
