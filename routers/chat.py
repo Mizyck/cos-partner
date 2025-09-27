@@ -6,16 +6,15 @@ router = APIRouter()
 
 # 定义请求体模型
 class ChatRequest(BaseModel):
+    user_id: str = "default_user"
     user_input: str
-    role: str = "界徐盛"
+    role: str = "default"
 
-@router.post("/")
-def chat(req: ChatRequest):
+class ChatResponse(BaseModel):
+    reply: str
+
+@router.post("/",  response_model = ChatResponse)
+async def chat(req: ChatRequest):
     reply = call_llm(req.user_input, req.role)
-    return {
-        "role": req.role,
-        "user_input": req.user_input,
-        "reply": reply,
-        "status": "success"
-    }
+    return ChatResponse(reply=reply)
 
