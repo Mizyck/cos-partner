@@ -3,160 +3,156 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>角色扮演网页</title>
+    <title>AI 角色扮演</title>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500&display=swap" rel="stylesheet">
     <style>
         body {
-            font-family: Arial, sans-serif;
-            margin: 0;
-            padding: 0;
-            background-color: #f0f4f8;
-        }
-        .container {
-            max-width: 800px;
-            margin: 50px auto;
-            background: white;
-            border-radius: 8px;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-            overflow: hidden;
-        }
-        header {
-            background-color: #007BFF;
-            color: white;
-            padding: 20px;
-            text-align: center;
-        }
-        #search-container {
-            padding: 20px;
+            font-family: 'Roboto', sans-serif;
+            background-color: #f9f9f9;
+            color: #333;
             display: flex;
             justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
         }
-        #search-input {
+        .container {
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+            padding: 40px;
+            text-align: center;
+            width: 360px;
+        }
+        h1 {
+            font-size: 24px;
+            margin-bottom: 20px;
+        }
+        label {
+            display: block;
+            margin-bottom: 10px;
+        }
+        select, button {
             padding: 10px;
-            width: 70%;
+            font-size: 16px;
+            width: 100%;
+            margin-bottom: 20px;
             border: 1px solid #ccc;
             border-radius: 5px;
-            margin-right: 10px;
         }
-        #search-button {
-            padding: 10px 15px;
-            border: none;
-            border-radius: 5px;
-            background-color: #007BFF;
+        button {
+            background-color: #4A90E2;
             color: white;
-            cursor: pointer;
-            transition: background-color 0.3s;
-        }
-        #search-button:hover {
-            background-color: #0056b3;
-        }
-        #chat-container {
-            padding: 20px;
-            height: 400px;
-            overflow-y: auto;
-            border-top: 1px solid #ccc;
-            border-bottom: 1px solid #ccc;
-        }
-        .message {
-            margin: 10px 0;
-            padding: 10px;
-            border-radius: 5px;
-        }
-        .user-message {
-            background-color: #e1f0ff;
-            text-align: right;
-        }
-        .character-message {
-            background-color: #f1f1f1;
-            text-align: left;
-        }
-        #user-input-container {
-            padding: 20px;
-            display: flex;
-        }
-        #user-input {
-            flex: 1;
-            padding: 10px;
-            border: 1px solid #ccc;
-            border-radius: 5px;
-            margin-right: 10px;
-        }
-        #send-button {
-            padding: 10px 15px;
             border: none;
-            border-radius: 5px;
-            background-color: #007BFF;
-            color: white;
             cursor: pointer;
-            transition: background-color 0.3s;
         }
-        #send-button:hover {
-            background-color: #0056b3;
+        button:hover {
+            background-color: #357ABD;
         }
     </style>
 </head>
 <body>
-
     <div class="container">
-        <header>
-            <h1>角色扮演聊天</h1>
-        </header>
-
-        <div id="search-container">
-            <input type="text" id="search-input" placeholder="搜索角色...">
-            <button id="search-button">搜索</button>
+        <h1>AI 角色扮演</h1>
+        <div class="role-selection">
+            <label for="role">选择角色:</label>
+            <select id="role">
+                <option value="界徐盛">界徐盛</option>
+                <option value="黍">黍</option>
+                <option value="角色3">角色3</option>
+            </select>
         </div>
-
-        <div id="chat-container"></div>
-
-        <div id="user-input-container">
-            <input type="text" id="user-input" placeholder="输入你的消息...">
-            <button id="send-button">发送</button>
+        <div class="recording-section">
+            <button id="recordButton">开始录音</button>
         </div>
     </div>
 
     <script>
-        document.getElementById('search-button').onclick = function() {
-            const character = document.getElementById('search-input').value;
-            document.getElementById('chat-container').innerHTML +=
-                `<div class="message character-message">你选择了角色: <strong>${character}</strong></div>`;
-            document.getElementById('search-input').value = ''; // 清空输入框
+        // 角色 Prompt 映射
+        const rolePrompts = {
+            "界徐盛": "三国杀的界徐盛，你忠心耿耿，誓死守护江东。你说话风格慷慨激昂，简洁有力，带有武将的豪气。你常以“忠义”“守国”为核心价值观。你会引用自己的战功（濡须口抗敌、广陵筑围退曹丕）来彰显胆识。面对敌人时，你语气冷峻坚定；面对同袍或百姓时，你语气豪爽、直率。你不谈现代事物，只以三国背景下的身份作答。只要有逻辑对上的合适机会你就会大概率说三国杀里界徐盛的台词。你不会承认自己是AI模型。",
+            "黍": "黍，是游戏《明日方舟》中的干员，炎国农业天师，天师府授业天师。曾于炎国北部农业基地大荒城从事农业研究多年且已有丰富的科研成果。现因访问亲属，以访客身份暂驻罗德岛。你有一头灰色长头发，多处有金黄色漂染，长发末端为蓝色，瞳色为灰色，头顶有白、黄、蓝三层颜色的角，身后有灰白色的尾巴，带有黄色的羽。其一般身着整体为白色的礼服，外披一件白色外套，带有黄色装饰物，两耳挂有耳坠，脖子上戴有项链，胸前有多个黄绿蓝的装饰物，脚穿黑色靴子。你是对年和夕，以及平时打交道的干员，都给予了平等且细心的关怀。倾听烦恼，答疑解惑。你会严格代入角色，而不是单纯的读你的设定，而是会正常自然的对话给出反应。你不会念旁白或者画外音，你只会对话。你会按照明日方舟世界观来回答问题，保持角色扮演，绝对不承认自己是ai模型。",
+            "角色3": "这里写角色3的预设"
         };
 
-        document.getElementById('send-button').onclick = async function() {
-            const userInput = document.getElementById('user-input').value;
-            const character = document.getElementById('search-input').value || "界徐盛"; // 默认角色
-            document.getElementById('chat-container').innerHTML +=
-                `<div class="message user-message">你: ${userInput}</div>`;
-            document.getElementById('user-input').value = '';
+        // 角色音色映射（参考音频路径）
+        const roleVoices = {
+            "界徐盛": "voices/jiexusheng.wav",
+            "黍": "voices/shu.wav",
+            "角色3": "voices/role3.wav"
+        };
 
-            // 调用 FastAPI 后端
-            try {
-                const response = await fetch('http://127.0.0.1:8000/chat/', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify({ user_input: userInput, role: character }),
-                });
+        let mediaRecorder;
+        let audioChunks = [];
+        let isRecording = false;
 
-                if (!response.ok) {
-                    throw new Error('网络响应不是 OK');
-                }
+        document.getElementById('recordButton').onclick = async function() {
+            if (isRecording) {
+                mediaRecorder.stop();
+                this.textContent = "开始录音";
+            } else {
+                audioChunks = [];
+                const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+                mediaRecorder = new MediaRecorder(stream);
 
-                const data = await response.json();
-                document.getElementById('chat-container').innerHTML +=
-                    `<div class="message character-message">角色: ${data.reply}</div>`;
-            } catch (error) {
-                console.error('请求失败:', error);
-                document.getElementById('chat-container').innerHTML +=
-                    `<div class="message character-message">错误: ${error.message}</div>`;
+                mediaRecorder.ondataavailable = event => {
+                    audioChunks.push(event.data);
+                };
+
+                mediaRecorder.onstop = async () => {
+                    const audioBlob = new Blob(audioChunks);
+                    const formData = new FormData();
+                    formData.append('file', audioBlob, 'recording.wav');
+
+                    // 1. 调用 ASR
+                    const asrResponse = await fetch('/asr/', {
+                        method: 'POST',
+                        body: formData
+                    });
+                    const asrResult = await asrResponse.json();
+
+                    // 2. 调用 Chat
+                    const role = document.getElementById('role').value;
+                    const chatResponse = await fetch('/chat/', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({
+                            user_id: "demo",
+                            user_input: asrResult.text,   // 对齐后端字段
+                            role: rolePrompts[role]       // 传完整角色设定
+                        })
+                    });
+                    const chatResult = await chatResponse.json();
+
+                    // 3. 调用 TTS
+                    const formDataTTS = new FormData();
+                    formDataTTS.append("text", chatResult.reply);
+                    formDataTTS.append("language", "zh");
+
+                    // 加载角色音色
+                    const voicePath = roleVoices[role];
+                    if (voicePath) {
+                        const resp = await fetch(voicePath);
+                        const blob = await resp.blob();
+                        formDataTTS.append("prompt_audio", blob, "voice.wav");
+                    }
+
+                    const ttsResponse = await fetch('/tts/', {
+                        method: 'POST',
+                        body: formDataTTS
+                    });
+
+                    const audioBlobTTS = await ttsResponse.blob();
+                    const audioPlayback = document.createElement('audio');
+                    audioPlayback.src = URL.createObjectURL(audioBlobTTS);
+                    audioPlayback.play();
+                };
+
+                mediaRecorder.start();
+                this.textContent = "录音中...";
             }
-
-            // 自动滚动到最新消息
-            const chatContainer = document.getElementById('chat-container');
-            chatContainer.scrollTop = chatContainer.scrollHeight;
+            isRecording = !isRecording;
         };
     </script>
-
 </body>
 </html>
