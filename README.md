@@ -41,13 +41,15 @@ git clone git@hf.co:coqui/XTTS-v2
 ```
 请将下载的模型文件放置在项目根目录（main.py同级）下的 models/ 内（没有则新建文件夹）。
 ### 3. 设置大模型API
-在.env中设置自己的LLM的API KEY，默认使用七牛云，若使用其他接口可自行在 core/config.py 修改
+在.env中设置自己的大语言模型的API KEY，默认使用七牛云，若使用其他接口可自行在 core/config.py 修改
 ### 4. 启动服务
 ```bash
 uvicorn main:app --reload --port 8000
 ```
 
 启动后访问：
+
+语音对话主页：http://127.0.0.1:8000
 
 Swagger 文档: http://127.0.0.1:8000/docs
 
@@ -108,30 +110,31 @@ POST /asr/
 }
 
 ```
-响应：生成的wv文件路径（服务端临时文件）
+响应：生成的wav文件路径（服务端临时文件）
 
 
 ## 项目结构
 ```bash
 cos-partner/
-├── main.py              # 入口文件
+├── core/                # 配置与工具
+│   └── config.py
+├── models/              # 存放 XTTS 模型
 ├── routers/             # 路由模块
-│   ├── chat.py          # 对话接口
 │   ├── asr.py           # 语音识别接口
+│   ├── chat.py          # 对话接口
 │   └── tts.py           # 文本转语音接口
 ├── services/            # 服务逻辑
-│   ├── llm_service.py   # llm模型调用（目前 mock）
-│   ├── asr_service.py   # asr模型调用
-│   └── tts_service.py   # tts模型调用
+│   ├── asr_service.py   # ASR 调用
+│   ├── llm_service.py   # LLM 调用
+│   └── tts_service.py   # TTS 调用
+├── voices/              # 参考音色文件
+│   ├── jiexusheng.wav
+│   └── shu.wav
+├── index.html           # 前端页面
+├── main.py              # 入口文件
 ├── requirements.txt     # 依赖
-├── README.md            # 项目说明
-└── .gitignore
+├── .env                 # 环境变量（API Key）
+├── .gitignore
+└── README.md
+
 ```
-## TODO
-接入真实大语言模型
-
-增加上下文记忆与多角色管理
-
-优化 TTS 推理速度，支持流式输出
-
-前端页面集成（WebSocket 实时对话）
