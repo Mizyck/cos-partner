@@ -138,3 +138,17 @@ cos-partner/
 └── README.md
 
 ```
+## 致谢
+
+本项目基于以下优秀的开源/服务：
+
+- [Qwen-Turbo](https://qwenlm.github.io/) —— 大语言模型，提供角色扮演对话能力  
+- [FunASR](https://github.com/alibaba-damo-academy/FunASR) —— 语音识别模型  
+- [Coqui XTTS-v2](https://github.com/coqui-ai/TTS) —— 语音合成模型  
+- [FastAPI](https://fastapi.tiangolo.com/) —— 高性能 Python Web 框架  
+- [PyTorch](https://pytorch.org/) —— 深度学习框架
+## 友情链接
+
+- [七牛云 AI 推理平台](https://portal.qiniu.com/ai-inference/api-key) —— 提供大模型 API Key  
+- [项目架构文档](./ARCHITECTURE.md)  
+- [Demo 视频](./docs/demo.mp4)
