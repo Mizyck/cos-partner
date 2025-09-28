@@ -1,6 +1,6 @@
 # cos-LLM / cos-partner
 
-AI 角色扮演项目 —— 基于 FastAPI 的后端服务。 目标：提供角色扮演对话接口，支持前端调用，集成 大语言模型 (LLM)、FunASR 与 CoquiXTTS-V2，实现沉浸式角色扮演体验。
+AI 角色扮演项目 —— 基于 FastAPI 的后端服务。 目标：提供角色扮演对话接口，支持前端调用，集成 qwen-turbo、FunASR 与 CoquiXTTS-V2，实现沉浸式角色扮演体验。
 
 ---
 
@@ -39,8 +39,10 @@ git lfs install
 
 git clone git@hf.co:coqui/XTTS-v2
 ```
-请将下载的模型文件放置在项目根目录（main.py同级）下的 models/ 内（没有则新建文件夹）
-### 3. 启动服务
+请将下载的模型文件放置在项目根目录（main.py同级）下的 models/ 内（没有则新建文件夹）。
+### 3. 设置大模型API
+在.env中设置自己的LLM的API KEY，默认使用七牛云，若使用其他接口可自行在 core/config.py 修改
+### 4. 启动服务
 ```bash
 uvicorn main:app --reload --port 8000
 ```
